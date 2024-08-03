@@ -202,10 +202,11 @@ class Bibliography(QWidget):
             if reference:
                 self.ldt_title.setText(reference.title)
                 self.ldt_pages.setText(reference.pages)
-                self.ddt_publication_date.setDate(
-                    QDate.fromString(str(reference.publication_date), "yyyy-MM-dd")
-                )
-                self.chk_enable_date.setChecked(True)
+                if reference.publication_date:
+                    self.ddt_publication_date.setDate(
+                        QDate.fromString(str(reference.publication_date), "yyyy-MM-dd")
+                    )
+                    self.chk_enable_date.setChecked(True)
                 self.ldt_publisher.setText(reference.publisher)
                 self.ldt_editor.setText(reference.editor)
                 self.cbx_authors.clear()
@@ -246,7 +247,7 @@ class Bibliography(QWidget):
         if self.current_story_id:
             title = self.ldt_title.text() if self.ldt_title.text() else None
             pages = self.ldt_pages.text() if self.ldt_pages.text() else None
-            if self.chk_enable_date.isEnabled():
+            if self.chk_enable_date.isChecked():
                 publication_date = self.ddt_publication_date.date().toPython()
             else:
                 publication_date = None
@@ -275,6 +276,7 @@ class Bibliography(QWidget):
                 self.current_bibliography_id = ref.id
 
             self.load_model()
+            self.clear_reference_form()
 
     def delete_reference(self):
         if self.current_bibliography_id:
